@@ -31,3 +31,6 @@ six==1.16.0
 sounddevice==0.4.6
 threadpoolctl==3.5.0
 wheel==0.43.0
+tensorflow~=2.16.1
+pandas~=2.2.2
+seaborn~=0.13.2
