@@ -16,7 +16,7 @@ tflite_save_path = 'model/keypoint_classifier/keypoint_classifier.tflite'
 
 # Dataset reading
 X_dataset = np.loadtxt(dataset, delimiter=',', dtype='float32', usecols=list(range(1, (21 * 2) + 1)))
-y_dataset = np.loadtxt(dataset, delimiter=',', dtype='int32', usecols=(0))
+y_dataset = np.loadtxt(dataset, delimiter=',', dtype='int32', usecols=0)
 X_train, X_test, y_train, y_test = train_test_split(X_dataset, y_dataset, train_size=0.75, random_state=RANDOM_SEED)
 
 # Model building
@@ -68,9 +68,9 @@ print(np.argmax(np.squeeze(predict_result)))
 
 
 # Confusion matrix
-def print_confusion_matrix(y_true, y_pred, report=True):
+def print_confusion_matrix(y_true, y_predict, report=True):
     labels = sorted(list(set(y_true)))
-    cmx_data = confusion_matrix(y_true, y_pred, labels=labels)
+    cmx_data = confusion_matrix(y_true, y_predict, labels=labels)
 
     df_cmx = pd.DataFrame(cmx_data, index=labels, columns=labels)
 
@@ -81,7 +81,7 @@ def print_confusion_matrix(y_true, y_pred, report=True):
 
     if report:
         print('Classification Report')
-        print(classification_report(y_test, y_pred))
+        print(classification_report(y_test, y_predict))
 
 
 Y_pred = model.predict(X_test)
