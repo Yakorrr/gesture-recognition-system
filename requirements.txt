@@ -5,8 +5,8 @@ contourpy==1.2.1
 cycler==0.12.1
 flatbuffers==24.3.25
 fonttools==4.51.0
-jax==0.4.26
-jaxlib==0.4.26
+jax==0.4.29
+jaxlib==0.4.29
 joblib==1.4.2
 kiwisolver==1.4.5
 marshmallow==3.21.1
@@ -31,6 +31,6 @@ six==1.16.0
 sounddevice==0.4.6
 threadpoolctl==3.5.0
 wheel==0.43.0
-tensorflow~=2.16.1
+tensorflow~=2.15.0
 pandas~=2.2.2
 seaborn~=0.13.2

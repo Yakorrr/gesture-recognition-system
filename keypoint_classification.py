@@ -7,11 +7,11 @@ from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.model_selection import train_test_split
 
 RANDOM_SEED = 42
-NUM_CLASSES = 4  # Number of classes
+NUM_CLASSES = 5  # Number of classes (must be max +1) upd: not sure yet about +1
 
 # Specify each path
 dataset = 'model/keypoint_classifier/keypoint.csv'
-model_save_path = 'model/keypoint_classifier/keypoint_classifier.hdf5'
+model_save_path = 'model/keypoint_classifier/keypoint_classifier.keras'
 tflite_save_path = 'model/keypoint_classifier/keypoint_classifier.tflite'
 
 # Dataset reading
@@ -23,9 +23,11 @@ X_train, X_test, y_train, y_test = train_test_split(X_dataset, y_dataset, train_
 model = tf.keras.models.Sequential([
     tf.keras.layers.Input((21 * 2,)),
     tf.keras.layers.Dropout(0.2),
-    tf.keras.layers.Dense(20, activation='relu'),
+    tf.keras.layers.Dense(50, activation='relu'),
+    tf.keras.layers.Dropout(0.2),
+    tf.keras.layers.Dense(30, activation='relu'),
     tf.keras.layers.Dropout(0.4),
-    tf.keras.layers.Dense(10, activation='relu'),
+    tf.keras.layers.Dense(20, activation='relu'),
     tf.keras.layers.Dense(NUM_CLASSES, activation='softmax')
 ])
 
@@ -49,7 +51,7 @@ model.compile(
 model.fit(
     X_train,
     y_train,
-    epochs=1000,
+    epochs=100,
     batch_size=128,
     validation_data=(X_test, y_test),
     callbacks=[cp_callback, es_callback]
@@ -59,7 +61,7 @@ model.fit(
 val_loss, val_acc = model.evaluate(X_test, y_test, batch_size=128)
 
 # Loading the saved model
-model = tf.keras.models.load_model(model_save_path)
+model = tf.keras.models.load_model(model_save_path, compile=False)
 
 # Inference test
 predict_result = model.predict(np.array([X_test[0]]))
@@ -87,11 +89,11 @@ def print_confusion_matrix(y_true, y_predict, report=True):
 Y_pred = model.predict(X_test)
 y_pred = np.argmax(Y_pred, axis=1)
 
-print_confusion_matrix(y_test, y_pred)
+# print_confusion_matrix(y_test, y_pred)
 
 # Convert to model for Tensorflow-Lite
 # Save as a model dedicated to inference
-model.save(model_save_path, include_optimizer=False)
+model.save(model_save_path)
 
 # Transform model (quantization)
 converter = tf.lite.TFLiteConverter.from_keras_model(model)
