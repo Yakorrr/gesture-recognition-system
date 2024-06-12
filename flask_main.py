@@ -6,8 +6,10 @@ from flask_login import LoginManager
 from flask_smorest import Api, Blueprint
 
 from model.database import db
-from model import (UserBlueprint, RegistrationBlueprint,
-                   GestureBlueprint, CreationHistoryBlueprint)
+from model.resources.creation_history import blp as CreationHistoryBlueprint
+from model.resources.gesture import blp as GestureBlueprint
+from model.resources.registration import blp as RegistrationBlueprint
+from model.resources.user import blp as UserBlueprint
 
 defaultPage = Blueprint("index", __name__, description="Default page")
 

@@ -1,12 +1,10 @@
 from flask.views import MethodView
-from flask_jwt_extended import create_access_token, jwt_required
+from flask_jwt_extended import jwt_required
 from flask_smorest import Blueprint, abort
-from passlib.handlers.pbkdf2 import pbkdf2_sha256
-from sqlalchemy.exc import IntegrityError, NoResultFound
+from sqlalchemy.exc import NoResultFound
 
-from model import UserModel, RegistrationModel, CreationHistoryModel
-from model import UserSchema, CreationHistorySchema, CreationHistoryQuerySchema
-from model.database import db
+from model import CreationHistoryModel
+from model import CreationHistorySchema, CreationHistoryQuerySchema
 
 blp = Blueprint("creation_history", __name__, description="Gesture Creation History")
 
