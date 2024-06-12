@@ -7,6 +7,7 @@ import cv2 as cv
 import mediapipe as mp
 import numpy as np
 
+from flask_main import create_app
 from model import KeyPointClassifier
 from utils import CvFpsCalc
 from utils.functions import *
@@ -35,6 +36,8 @@ def get_args():
 
 
 def main():
+    create_app()
+
     # Argument parsing #################################################################
     args = get_args()
 
@@ -121,7 +124,7 @@ def main():
                 pre_processed_landmark_list = pre_process_landmark(
                     landmark_list)
 
-                # # Write to the dataset file
+                # Write to the dataset file
                 logging_csv(number, mode, pre_processed_landmark_list)
 
                 # Hand sign classification
