@@ -1,7 +1,7 @@
 from model.database import db
 
 
-class GesturesModel(db.Model):
+class GestureModel(db.Model):
     __tablename__ = 'gestures'
 
     id = db.Column(db.Integer, primary_key=True)

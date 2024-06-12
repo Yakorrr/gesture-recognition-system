@@ -13,7 +13,7 @@ class RegistrationModel(db.Model):
     registration_date_time = db.Column(
         db.TIMESTAMP,
         nullable=False,
-        default=func.now()
+        server_default=func.now()
     )
 
     user = db.relationship(

@@ -21,11 +21,21 @@ class RegistrationSchema(Schema):
     registration_date_time = fields.DateTime(required=True, validate=validate_date)
 
 
-class GesturesSchema(Schema):
+class RegistrationQuerySchema(Schema):
+    id = fields.Int(validate=validate.Range(min=1))
+    email = fields.Email()
+
+
+class GestureSchema(Schema):
     id = fields.Int(dump_only=True)
     name = fields.Str(required=True, validate=validate.Length(min=1))
     description = fields.Str(required=True, validate=validate.Length(min=5))
     language = fields.Str(required=True, validate=validate.OneOf(choices=['EN', 'UA']))
+
+
+class GestureQuerySchema(Schema):
+    id = fields.Int(validate=validate.Range(min=1))
+    name = fields.Str(validate=validate.Length(min=1))
 
 
 class CreationHistorySchema(Schema):
@@ -33,3 +43,8 @@ class CreationHistorySchema(Schema):
     id_gesture = fields.Int(required=True, validate=validate.Range(min=1))
     creation_date_time = fields.DateTime(required=True, validate=validate_date)
     id_admin = fields.Int(required=True, validate=validate_admin)
+
+
+class CreationHistoryQuerySchema(Schema):
+    id_gesture = fields.Int(validate=validate.Range(min=1))
+    id_admin = fields.Int(validate=validate.Range(min=1))

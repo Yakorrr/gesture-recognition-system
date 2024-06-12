@@ -1,5 +1,4 @@
 from sqlalchemy import ForeignKey
-from sqlalchemy.sql import func
 
 from model.database import db
 
@@ -14,7 +13,6 @@ class UserModel(db.Model):
 
     date_of_birth = db.Column(
         db.Date,
-        server_default=func.now(),
         nullable=False
     )
 

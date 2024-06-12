@@ -1,4 +1,5 @@
 absl-py==2.1.0
+apispec==6.6.1
 astunparse==1.6.3
 attrs==23.2.0
 blinker==1.8.2
@@ -11,6 +12,9 @@ colorama==0.4.6
 contourpy==1.2.1
 cycler==0.12.1
 Flask==3.0.3
+Flask-JWT-Extended==4.6.0
+Flask-Login==0.6.3
+flask-smorest==0.44.0
 Flask-SQLAlchemy==3.1.1
 flatbuffers==24.3.25
 fonttools==4.51.0
@@ -44,11 +48,13 @@ opt-einsum==3.3.0
 packaging==24.0
 paho-mqtt==1.6.1
 pandas==2.2.2
+passlib==1.7.4
 pillow==10.3.0
 protobuf==4.25.3
 pyasn1==0.6.0
 pyasn1_modules==0.4.0
 pycparser==2.22
+PyJWT==2.8.0
 pyparsing==3.1.2
 python-dateutil==2.9.0.post0
 pytz==2024.1
@@ -72,5 +78,6 @@ threadpoolctl==3.5.0
 typing_extensions==4.12.2
 tzdata==2024.1
 urllib3==2.2.1
+webargs==8.4.0
 Werkzeug==3.0.3
 wrapt==1.14.1
