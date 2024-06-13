@@ -29,11 +29,11 @@ class UserModel(db.Model):
     registration = db.relationship(
         "RegistrationModel",
         foreign_keys=id_registration,
-        back_populates="users"
+        back_populates="user"
     )
 
-    admin = db.relationship(
+    creation_history = db.relationship(
         "CreationHistoryModel",
-        back_populates="users",
+        back_populates="admin",
         lazy="dynamic"
     )

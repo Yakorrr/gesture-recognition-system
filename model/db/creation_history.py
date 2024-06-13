@@ -25,6 +25,7 @@ class CreationHistoryModel(db.Model):
     id_admin = db.Column(
         db.Integer,
         ForeignKey("users.id", ondelete="CASCADE"),
+        unique=False,
         nullable=False
     )
 

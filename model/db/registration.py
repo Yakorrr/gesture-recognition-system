@@ -12,12 +12,11 @@ class RegistrationModel(db.Model):
 
     registration_date_time = db.Column(
         db.TIMESTAMP,
-        nullable=False,
         server_default=func.now()
     )
 
     user = db.relationship(
         "UserModel",
-        back_populates="registrations",
+        back_populates="registration",
         lazy="dynamic"
     )

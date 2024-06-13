@@ -9,8 +9,8 @@ class GestureModel(db.Model):
     description = db.Column(db.String(128), nullable=False)
     language = db.Column(db.String, nullable=False)
 
-    gesture = db.relationship(
+    creation_history = db.relationship(
         "CreationHistoryModel",
-        back_populates="gestures",
+        back_populates="gesture",
         lazy="dynamic"
     )

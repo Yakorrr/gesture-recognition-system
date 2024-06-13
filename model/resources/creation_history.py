@@ -1,7 +1,8 @@
 from flask.views import MethodView
 from flask_jwt_extended import jwt_required
 from flask_smorest import Blueprint, abort
-from sqlalchemy.exc import NoResultFound
+from sqlalchemy import and_
+from sqlalchemy.exc import IntegrityError
 
 from model import CreationHistoryModel
 from model import CreationHistorySchema, CreationHistoryQuerySchema
@@ -29,6 +30,10 @@ class CreationHistoryList(MethodView):
     def get(self):
         return CreationHistoryModel.query.all()
 
+
+@blp.route("/creation")
+class Creation(MethodView):
+    # Return a json that contains admin name and gesture name instead of ID's in future updates
     @jwt_required()
     @blp.arguments(CreationHistoryQuerySchema, location="query", as_kwargs=True)
     @blp.response(200, CreationHistoryQuerySchema(many=True))
@@ -37,16 +42,27 @@ class CreationHistoryList(MethodView):
         id_admin = kwargs.get("id_admin")
 
         if not id_gesture and not id_admin:
-            abort(400, message="Bad request: Gesture ID or Admin ID needed.")
+            abort(400, message="Bad request: Gesture ID or Admin ID needed")
 
         try:
-            query = CreationHistoryModel.query.filter()
+
+            query = CreationHistoryModel.query
+            conditions = []
 
             if id_gesture:
-                query = query.filter(CreationHistoryModel.id == id_gesture)
+                conditions.append(CreationHistoryModel.id_gesture == id_gesture)
             if id_admin:
-                query = query.filter(CreationHistoryModel.email == id_admin)
-        except NoResultFound:
-            abort(404, message="No data found.")
+                conditions.append(CreationHistoryModel.id_admin == id_admin)
 
-        return query.all()
+            if conditions:
+                query = query.filter(and_(*conditions))
+
+            history = query.all()
+
+            if not history:
+                abort(404, message="Bad request: No data found")
+
+        except IntegrityError as e:
+            abort(400, message=str(e))
+
+        return history

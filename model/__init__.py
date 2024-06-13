@@ -6,8 +6,11 @@ from model.db.user import UserModel
 from model.keypoint_classifier.keypoint_classifier import KeyPointClassifier
 from model.schema.schemas import CreationHistoryQuerySchema
 from model.schema.schemas import CreationHistorySchema
+from model.schema.schemas import GestureInsertionSchema
 from model.schema.schemas import GestureQuerySchema
 from model.schema.schemas import GestureSchema
 from model.schema.schemas import RegistrationQuerySchema
 from model.schema.schemas import RegistrationSchema
+from model.schema.schemas import UserLoginSchema
+from model.schema.schemas import UserRegistrationSchema
 from model.schema.schemas import UserSchema
