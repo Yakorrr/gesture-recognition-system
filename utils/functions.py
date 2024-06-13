@@ -53,7 +53,6 @@ def select_mode(key, mode):
 
     if key in numbers_range:  # Numbers 0 ~ 9
         classifier_table_row_number = process_numbers(key)
-        print(classifier_table_row_number)
     if (key in english_range or  # English letters (both upper and lower)
             key in ukrainian_range):  # Ukrainian letters (both upper and lower)
         classifier_table_row_number = process_letters(key)

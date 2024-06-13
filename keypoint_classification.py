@@ -1,3 +1,5 @@
+import time
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -69,6 +71,8 @@ model.compile(
     metrics=['accuracy']
 )
 
+start_time = time.time_ns()
+
 # Model training
 model.fit(
     X_train,
@@ -79,6 +83,15 @@ model.fit(
     callbacks=[cp_callback]
 )
 
+end_time = time.time_ns()
+
+total_time = (end_time - start_time) / 10 ** 9
+total_time_minutes = int(total_time // 60)
+total_time_seconds = int(total_time % 60)
+print(f'Total training time: '
+      f'{total_time_minutes} min '
+      f'{total_time_seconds} sec')
+
 # Model evaluation
 val_loss, val_acc = model.evaluate(X_test, y_test, batch_size=128)
 
@@ -87,8 +100,8 @@ model = tf.keras.models.load_model(model_save_path, compile=False)
 
 # Inference test
 predict_result = model.predict(np.array([X_test[0]]))
-print(np.squeeze(predict_result))
-print(np.argmax(np.squeeze(predict_result)))
+# print(np.squeeze(predict_result))
+# print(np.argmax(np.squeeze(predict_result)))
 
 
 # Confusion matrix
@@ -147,5 +160,5 @@ interpreter.set_tensor(input_details[0]['index'], np.array([X_test[0]]))
 interpreter.invoke()
 tflite_results = interpreter.get_tensor(output_details[0]['index'])
 
-print(np.squeeze(tflite_results))
-print(np.argmax(np.squeeze(tflite_results)))
+# print(np.squeeze(tflite_results))
+# print(np.argmax(np.squeeze(tflite_results)))
