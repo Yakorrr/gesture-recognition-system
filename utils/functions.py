@@ -8,8 +8,8 @@ from model.db.user import UserModel
 
 
 def find_symbol_classifier_label(symbol):
-    with open('model/keypoint_classifier/keypoint_classifier_label.csv',
-              'r', newline='', encoding='utf-8') as file:
+    with (open('model/keypoint_classifier/keypoint_classifier_label.csv',
+               'r', newline='', encoding='utf-8') as file):
         reader = csv.reader(file)
         print("Key pressed:", symbol, end='\n')
 
@@ -18,7 +18,8 @@ def find_symbol_classifier_label(symbol):
             joined_row = ''.join(row)
 
             # Convert the row to a string and check if it contains the symbol
-            if symbol.upper() in joined_row and ('EN' in joined_row or 'UA' in joined_row):
+            if (symbol.upper() + ' ') in joined_row and \
+                    ('EN' in joined_row or 'UA' in joined_row):
                 return i
 
     return None

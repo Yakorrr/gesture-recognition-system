@@ -417,7 +417,7 @@ def draw_info_text(image, brect, handedness, hand_sign_text):
     info_text = handedness.classification[0].label[0:]
 
     if hand_sign_text != "":
-        info_text = info_text + ':' + hand_sign_text
+        info_text = info_text + ': ' + hand_sign_text
 
     cv.putText(image, info_text, (brect[0] + 5, brect[1] - 4),
                cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1, cv.LINE_AA)
@@ -439,16 +439,17 @@ def draw_info(image, fps, mode, number):
                1.0, (255, 255, 255), 2, cv.LINE_AA)
 
     mode_string = [
+        'Translation',
         'Logging Key Point',
     ]
 
-    if 1 <= mode <= 2:
-        cv.putText(image, "Mode: " + mode_string[mode - 1], (10, 90),
+    if 0 <= mode <= 1:
+        cv.putText(image, "Mode: " + mode_string[mode], (10, 90),
                    cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1,
                    cv.LINE_AA)
 
-        if 0 <= number <= 9:
-            cv.putText(image, "Number: " + str(number), (10, 110),
+        if 0 <= number <= 255:
+            cv.putText(image, "Key pressed: " + str(number), (10, 110),
                        cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1,
                        cv.LINE_AA)
 

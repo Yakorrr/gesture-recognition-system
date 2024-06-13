@@ -7,7 +7,23 @@ from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.model_selection import train_test_split
 
 RANDOM_SEED = 42
-NUM_CLASSES = 5  # Number of classes (must be max +1) upd: not sure yet about +1
+NUM_CLASSES = 31
+EPOCHS = 500
+
+# from model.database import db
+# from model import GestureModel
+# from flask_main import create_app
+#
+# RANDOM_SEED = 42
+# NUM_CLASSES = None
+#
+# app = create_app()
+#
+# with app.app_context():
+#     try:
+#         NUM_CLASSES = db.session.query(GestureModel).count()
+#     except Exception as e:
+#         print("Error:", str(e))
 
 # Specify each path
 dataset = 'model/keypoint_classifier/keypoint.csv'
@@ -17,17 +33,23 @@ tflite_save_path = 'model/keypoint_classifier/keypoint_classifier.tflite'
 # Dataset reading
 X_dataset = np.loadtxt(dataset, delimiter=',', dtype='float32', usecols=list(range(1, (21 * 2) + 1)))
 y_dataset = np.loadtxt(dataset, delimiter=',', dtype='int32', usecols=0)
-X_train, X_test, y_train, y_test = train_test_split(X_dataset, y_dataset, train_size=0.75, random_state=RANDOM_SEED)
+X_train, X_test, y_train, y_test = train_test_split(
+    X_dataset, y_dataset, train_size=0.75, random_state=RANDOM_SEED
+)
 
 # Model building
 model = tf.keras.models.Sequential([
     tf.keras.layers.Input((21 * 2,)),
+    tf.keras.layers.Dropout(0.1),
+    tf.keras.layers.Dense(100, activation='relu'),
     tf.keras.layers.Dropout(0.2),
-    tf.keras.layers.Dense(50, activation='relu'),
+    tf.keras.layers.Dense(200, activation='relu'),
+    tf.keras.layers.Dropout(0.25),
+    tf.keras.layers.Dense(120, activation='relu'),
     tf.keras.layers.Dropout(0.2),
-    tf.keras.layers.Dense(30, activation='relu'),
-    tf.keras.layers.Dropout(0.4),
-    tf.keras.layers.Dense(20, activation='relu'),
+    tf.keras.layers.Dense(60, activation='relu'),
+    tf.keras.layers.Dropout(0.15),
+    tf.keras.layers.Dense(25, activation='relu'),
     tf.keras.layers.Dense(NUM_CLASSES, activation='softmax')
 ])
 
@@ -38,7 +60,7 @@ model.summary()
 cp_callback = tf.keras.callbacks.ModelCheckpoint(
     model_save_path, verbose=1, save_weights_only=False)
 # Callback for early stopping
-es_callback = tf.keras.callbacks.EarlyStopping(patience=20, verbose=1)
+# es_callback = tf.keras.callbacks.EarlyStopping(patience=20, verbose=1)
 
 # Model compilation
 model.compile(
@@ -51,10 +73,10 @@ model.compile(
 model.fit(
     X_train,
     y_train,
-    epochs=100,
+    epochs=EPOCHS,
     batch_size=128,
     validation_data=(X_test, y_test),
-    callbacks=[cp_callback, es_callback]
+    callbacks=[cp_callback]
 )
 
 # Model evaluation
@@ -98,9 +120,18 @@ model.save(model_save_path)
 # Transform model (quantization)
 converter = tf.lite.TFLiteConverter.from_keras_model(model)
 converter.optimizations = [tf.lite.Optimize.DEFAULT]
-tflite_quantized_model = converter.convert()
 
-open(tflite_save_path, 'wb').write(tflite_quantized_model)
+# Ensure that if any ops can't be converted, the converter throws an exception
+converter.target_spec.supported_ops = [
+    tf.lite.OpsSet.TFLITE_BUILTINS,  # Enable TensorFlow Lite ops.
+    tf.lite.OpsSet.SELECT_TF_OPS  # Enable TensorFlow ops.
+]
+
+converter.experimental_new_converter = True  # Toggling the new converter
+tflite_model = converter.convert()
+
+with open(tflite_save_path, 'wb') as file:
+    file.write(tflite_model)
 
 # Inference test
 interpreter = tf.lite.Interpreter(model_path=tflite_save_path)
