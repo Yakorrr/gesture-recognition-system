@@ -9,7 +9,7 @@ from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.model_selection import train_test_split
 
 RANDOM_SEED = 42
-NUM_CLASSES = 31
+NUM_CLASSES = 64
 EPOCHS = 500
 
 # from model.database import db
@@ -43,15 +43,15 @@ X_train, X_test, y_train, y_test = train_test_split(
 model = tf.keras.models.Sequential([
     tf.keras.layers.Input((21 * 2,)),
     tf.keras.layers.Dropout(0.1),
-    tf.keras.layers.Dense(100, activation='relu'),
+    tf.keras.layers.Dense(250, activation='relu'),
     tf.keras.layers.Dropout(0.2),
-    tf.keras.layers.Dense(200, activation='relu'),
+    tf.keras.layers.Dense(500, activation='relu'),
     tf.keras.layers.Dropout(0.25),
-    tf.keras.layers.Dense(120, activation='relu'),
+    tf.keras.layers.Dense(300, activation='relu'),
     tf.keras.layers.Dropout(0.2),
-    tf.keras.layers.Dense(60, activation='relu'),
+    tf.keras.layers.Dense(420, activation='relu'),
     tf.keras.layers.Dropout(0.15),
-    tf.keras.layers.Dense(25, activation='relu'),
+    tf.keras.layers.Dense(120, activation='relu'),
     tf.keras.layers.Dense(NUM_CLASSES, activation='softmax')
 ])
 

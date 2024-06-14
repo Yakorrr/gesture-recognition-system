@@ -40,34 +40,34 @@ def create_app():
     jwt = JWTManager(app)
 
     @jwt.expired_token_loader
-    def expired_token_callback(error_string):
+    def expired_token_callback(*_):
         return (
             jsonify({
-                "message": "The token has expired.",
-                "error": error_string
+                "message": "The token has been expired",
+                "error": "Unauthorized"
             }),
             401,
         )
 
     @jwt.invalid_token_loader
-    def invalid_token_callback(error_string):
+    def invalid_token_callback(*_):
         return (
             jsonify(
                 {
-                    "message": "Signature verification failed.",
-                    "error": error_string
+                    "message": "Signature verification failed",
+                    "error": "Unauthorized"
                 }
             ),
             401,
         )
 
     @jwt.unauthorized_loader
-    def missing_token_callback(error_string):
+    def missing_token_callback(*_):
         return (
             jsonify(
                 {
-                    "description": "Request does not contain an access token.",
-                    "error": error_string,
+                    "message": "Request does not contain an access token",
+                    "error": "Unauthorized",
                 }
             ),
             401,
